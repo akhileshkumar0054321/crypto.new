@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, memo } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 
 export interface TradingViewCryptoHeatmapWidgetProps {
   dataSource?: "Crypto" | "CryptoDeFi" | "CryptoAll";
@@ -42,19 +42,20 @@ function TradingViewCryptoHeatmapComponent({
   className = "",
 }: TradingViewCryptoHeatmapWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [widgetKey, setWidgetKey] = useState(0);
+
+  useEffect(() => {
+    setWidgetKey((prev) => prev + 1);
+  }, [dataSource, blockSize, blockColor, colorTheme]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    let scriptElement: HTMLScriptElement | null = null;
-    let isCleanedUp = false;
+    let isMounted = true;
 
     try {
-      // Clear previous widget elements safely
-      while (container.firstChild) {
-        container.removeChild(container.firstChild);
-      }
+      container.innerHTML = "";
 
       const widgetDiv = document.createElement("div");
       widgetDiv.className = "tradingview-widget-container__widget";
@@ -78,13 +79,12 @@ function TradingViewCryptoHeatmapComponent({
       container.appendChild(copyrightDiv);
 
       const script = document.createElement("script");
-      scriptElement = script;
       script.src = "https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js";
       script.type = "text/javascript";
       script.async = true;
       script.crossOrigin = "anonymous";
       script.onerror = () => {
-        // Suppress script error
+        // Safe error suppression
       };
 
       const widgetConfig = {
@@ -110,7 +110,7 @@ function TradingViewCryptoHeatmapComponent({
 
       script.innerHTML = JSON.stringify(widgetConfig);
 
-      if (!isCleanedUp) {
+      if (isMounted) {
         container.appendChild(script);
       }
     } catch {
@@ -118,37 +118,39 @@ function TradingViewCryptoHeatmapComponent({
     }
 
     return () => {
-      isCleanedUp = true;
-      if (scriptElement && scriptElement.parentNode) {
+      isMounted = false;
+      if (container) {
         try {
-          scriptElement.parentNode.removeChild(scriptElement);
+          container.innerHTML = "";
         } catch {
           // ignore
         }
       }
     };
   }, [
+    widgetKey,
     dataSource,
     blockSize,
     blockColor,
     colorTheme,
     hasTopBar,
     isDatasetSelectable,
+    gridColor,
+    scalePercentColor,
+    borderColor,
+    backgroundColor,
+    blockquoteColor,
     isZoomable,
     hasSymbolTooltip,
     isFullSize,
-    backgroundColor,
-    gridColor,
-    borderColor,
-    scalePercentColor,
-    blockquoteColor,
   ]);
 
   return (
     <div
-      className={`tradingview-widget-container h-full w-full rounded-2xl overflow-hidden ${className}`}
+      key={`tv-heatmap-${widgetKey}`}
+      className={`tradingview-widget-container h-full w-full rounded-xl overflow-hidden ${className}`}
       ref={containerRef}
-      style={{ height, width }}
+      style={{ width, height }}
     />
   );
 }

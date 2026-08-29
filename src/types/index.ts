@@ -779,8 +779,10 @@ export interface DetailedSixSectionAuditReport {
   live_sync_status?: {
     is_live: boolean;
     last_updated: string;
-    live_news_count: number;
-    sentiment_drift: string;
+    live_news_count?: number;
+    sentiment_drift?: string;
+    sentiment_shift_detected?: boolean;
+    baseline_reference_date?: string;
   };
 }
 

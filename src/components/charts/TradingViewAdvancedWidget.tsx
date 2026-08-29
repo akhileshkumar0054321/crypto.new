@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, memo } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 
 export interface TradingViewWidgetProps {
   symbol?: string;
@@ -147,49 +147,51 @@ function TradingViewWidgetComponent({
   const containerRef = useRef<HTMLDivElement>(null);
   const tvSymbol = resolveTradingViewSymbol(symbol, coinId);
   const displayName = coinName || symbol || "Cryptocurrency";
+  const [widgetKey, setWidgetKey] = useState(0);
+
+  // Increment key when essential config changes to cleanly re-mount without race conditions
+  useEffect(() => {
+    setWidgetKey((prev) => prev + 1);
+  }, [tvSymbol, interval, theme, style]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    let scriptElement: HTMLScriptElement | null = null;
-    let isCleanedUp = false;
+    let isMounted = true;
 
     try {
-      // Clear previous widget elements safely
-      while (container.firstChild) {
-        container.removeChild(container.firstChild);
-      }
+      // Clear out any previous scripts/nodes safely
+      container.innerHTML = "";
 
-      const widgetDiv = document.createElement("div");
-      widgetDiv.className = "tradingview-widget-container__widget";
-      widgetDiv.style.height = "calc(100% - 28px)";
-      widgetDiv.style.width = "100%";
-      container.appendChild(widgetDiv);
+      const widgetContainer = document.createElement("div");
+      widgetContainer.className = "tradingview-widget-container__widget";
+      widgetContainer.style.height = "calc(100% - 28px)";
+      widgetContainer.style.width = "100%";
+      container.appendChild(widgetContainer);
 
-      const copyrightDiv = document.createElement("div");
-      copyrightDiv.className = "tradingview-widget-copyright";
-      copyrightDiv.style.height = "28px";
-      copyrightDiv.style.display = "flex";
-      copyrightDiv.style.alignItems = "center";
-      copyrightDiv.style.justifyContent = "space-between";
-      copyrightDiv.style.padding = "0 8px";
-      copyrightDiv.innerHTML = `
+      const copyright = document.createElement("div");
+      copyright.className = "tradingview-widget-copyright";
+      copyright.style.height = "28px";
+      copyright.style.display = "flex";
+      copyright.style.alignItems = "center";
+      copyright.style.justifyContent = "space-between";
+      copyright.style.padding = "0 8px";
+      copyright.innerHTML = `
         <a href="https://www.tradingview.com/symbols/${encodeURIComponent(tvSymbol.replace(":", "-"))}/" rel="noopener nofollow" target="_blank" style="text-decoration: none;">
-          <span class="blue-text" style="color: #60a5fa; font-size: 11px; font-weight: 600;">${displayName} (${tvSymbol}) Real-Time Chart & Candlestick Patterns</span>
+          <span class="blue-text" style="color: #60a5fa; font-size: 11px; font-weight: 600;">${displayName} (${tvSymbol}) Real-Time Chart</span>
         </a>
-        <span class="trademark" style="color: #64748b; font-size: 11px;">Powered by TradingView</span>
+        <span class="trademark" style="color: #64748b; font-size: 11px;">TradingView</span>
       `;
-      container.appendChild(copyrightDiv);
+      container.appendChild(copyright);
 
       const script = document.createElement("script");
-      scriptElement = script;
       script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
       script.type = "text/javascript";
       script.async = true;
       script.crossOrigin = "anonymous";
       script.onerror = () => {
-        // Suppress cross-origin widget load errors
+        // Safe error suppression for external widget load
       };
 
       const widgetConfig = {
@@ -220,24 +222,25 @@ function TradingViewWidgetComponent({
 
       script.innerHTML = JSON.stringify(widgetConfig);
 
-      if (!isCleanedUp) {
+      if (isMounted) {
         container.appendChild(script);
       }
     } catch {
-      // Safe fallback
+      // Ignore widget init errors
     }
 
     return () => {
-      isCleanedUp = true;
-      if (scriptElement && scriptElement.parentNode) {
+      isMounted = false;
+      if (container) {
         try {
-          scriptElement.parentNode.removeChild(scriptElement);
+          container.innerHTML = "";
         } catch {
           // ignore
         }
       }
     };
   }, [
+    widgetKey,
     tvSymbol,
     displayName,
     interval,
@@ -255,6 +258,7 @@ function TradingViewWidgetComponent({
 
   return (
     <div
+      key={`tv-adv-${widgetKey}`}
       className={`tradingview-widget-container h-full w-full rounded-xl overflow-hidden ${className}`}
       ref={containerRef}
       style={{ height, width }}

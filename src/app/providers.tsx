@@ -21,39 +21,44 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Suppress cross-origin third-party script errors (TradingView / Puter / CDN iframe issues)
-    const handleGlobalError = (event: ErrorEvent) => {
-      const msg = event.message || "";
-      const filename = event.filename || "";
-      if (
+    const isBenignScriptError = (msg: string, src?: string) => {
+      const lowerMsg = (msg || "").toLowerCase();
+      const lowerSrc = (src || "").toLowerCase();
+      return (
         !msg ||
-        msg === "Script error." ||
-        msg.includes("Script error") ||
-        msg.includes("querySelector") ||
-        filename.includes("tradingview.com") ||
-        filename.includes("puter.com")
-      ) {
+        lowerMsg.includes("script error") ||
+        lowerMsg.includes("queryselector") ||
+        lowerMsg.includes("cannot read properties of null") ||
+        lowerMsg.includes("reading 'queryselector'") ||
+        lowerMsg.includes("tradingview") ||
+        lowerMsg.includes("puter") ||
+        lowerSrc.includes("tradingview.com") ||
+        lowerSrc.includes("puter.com")
+      );
+    };
+
+    const handleGlobalError = (event: ErrorEvent) => {
+      const msg = event.message || (event.error?.message ?? "");
+      const filename = event.filename || "";
+      if (isBenignScriptError(msg, filename)) {
         event.preventDefault();
+        event.stopPropagation();
         return true;
       }
     };
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       const reasonStr = String(event.reason?.message || event.reason || "");
-      if (
-        reasonStr.includes("Script error") ||
-        reasonStr.includes("tradingview") ||
-        reasonStr.includes("puter") ||
-        reasonStr.includes("querySelector")
-      ) {
+      if (isBenignScriptError(reasonStr)) {
         event.preventDefault();
       }
     };
 
-    window.addEventListener("error", handleGlobalError);
+    window.addEventListener("error", handleGlobalError, true);
     window.addEventListener("unhandledrejection", handleUnhandledRejection);
 
     return () => {
-      window.removeEventListener("error", handleGlobalError);
+      window.removeEventListener("error", handleGlobalError, true);
       window.removeEventListener("unhandledrejection", handleUnhandledRejection);
     };
   }, []);

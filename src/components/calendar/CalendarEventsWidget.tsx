@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, memo } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 
 interface CalendarWidgetProps {
   width?: string | number;
@@ -14,19 +14,20 @@ function CalendarWidgetComponent({
   className = "",
 }: CalendarWidgetProps) {
   const container = useRef<HTMLDivElement>(null);
+  const [widgetKey, setWidgetKey] = useState(0);
+
+  useEffect(() => {
+    setWidgetKey((prev) => prev + 1);
+  }, [height]);
 
   useEffect(() => {
     const currentContainer = container.current;
     if (!currentContainer) return;
 
-    let scriptElement: HTMLScriptElement | null = null;
-    let isCleanedUp = false;
+    let isMounted = true;
 
     try {
-      // Clear previous scripts/widgets safely
-      while (currentContainer.firstChild) {
-        currentContainer.removeChild(currentContainer.firstChild);
-      }
+      currentContainer.innerHTML = "";
 
       const widgetDiv = document.createElement("div");
       widgetDiv.className = "tradingview-widget-container__widget";
@@ -43,7 +44,6 @@ function CalendarWidgetComponent({
       currentContainer.appendChild(copyrightDiv);
 
       const script = document.createElement("script");
-      scriptElement = script;
       script.src = "https://s3.tradingview.com/external-embedding/embed-widget-events.js";
       script.type = "text/javascript";
       script.async = true;
@@ -61,7 +61,7 @@ function CalendarWidgetComponent({
         height: typeof height === "number" ? height : 550,
       });
 
-      if (!isCleanedUp) {
+      if (isMounted) {
         currentContainer.appendChild(script);
       }
     } catch {
@@ -69,19 +69,20 @@ function CalendarWidgetComponent({
     }
 
     return () => {
-      isCleanedUp = true;
-      if (scriptElement && scriptElement.parentNode) {
+      isMounted = false;
+      if (currentContainer) {
         try {
-          scriptElement.parentNode.removeChild(scriptElement);
+          currentContainer.innerHTML = "";
         } catch {
           // ignore
         }
       }
     };
-  }, [height]);
+  }, [widgetKey, height]);
 
   return (
     <div
+      key={`tv-cal-${widgetKey}`}
       className={`tradingview-widget-container rounded-xl overflow-hidden bg-[#0d121c] border border-slate-800 ${className}`}
       ref={container}
       style={{ width, height }}
