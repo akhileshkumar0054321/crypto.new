@@ -41,5 +41,17 @@
   "devDependencies": {
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.4"
+  },
+  "lavamoat": {
+    "allowScripts": {
+      "@google/genai": true,
+      "protobufjs": true,
+      "unrs-resolver": true
+    }
+  },
+  "allowScripts": {
+    "@google/genai": true,
+    "protobufjs": true,
+    "unrs-resolver": true
   }
 }
