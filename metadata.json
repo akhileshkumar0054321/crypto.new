@@ -1,0 +1,8 @@
+{
+  "name": "Remix crypto",
+  "description": "Real-time cryptocurrency market intelligence, live price tracking, early trend discovery, whale activity tracking, market divergence detection, downside risk checks, and trade exit planning.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
