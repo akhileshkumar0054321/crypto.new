@@ -1,5 +1,6 @@
-import LearnAndAboutPage from "../learn/page";
+import React from "react";
+import { LearnAndAboutContent } from "@/components/about/LearnAndAboutContent";
 
 export default function AboutPage() {
-  return <LearnAndAboutPage />;
+  return <LearnAndAboutContent />;
 }
