@@ -49,6 +49,11 @@ export const coinApi = {
     return api.get(`/api/coins/${id}/news-impact${qs}`);
   },
   getScenarios:(id: string) => api.get(`/api/coins/${id}/scenarios`),
+  getFullAnalysis:(id: string, headline?: string) => {
+    const qs = headline ? `?headline=${encodeURIComponent(headline)}` : "";
+    return api.get(`/api/coins/${id}/full-analysis${qs}`);
+  },
+  postFullAnalysis:(id: string, headline?: string) => api.post(`/api/coins/${id}/full-analysis`, { headline }),
   scanCoin:    (query: string) => api.post("/api/coins/scan", { query }),
 };
 

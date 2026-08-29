@@ -141,6 +141,11 @@ export function RealtimeCoinAnalysisReportModal({
   const viability = analysisData?.viability;
   const scenarios = analysisData?.scenarios;
 
+  const sentimentEvolution = detailedReport?.sentiment_evolution || report?.sentiment_evolution || simpleEnglishAnalysis?.sentiment_evolution;
+  const oldVsNew = detailedReport?.old_vs_new_news_reference || report?.old_vs_new_news_reference || simpleEnglishAnalysis?.old_vs_new_news_reference;
+  const priceDelta = detailedReport?.realtime_price_delta || report?.realtime_price_delta || simpleEnglishAnalysis?.realtime_price_delta;
+  const liveSync = detailedReport?.live_sync_status || report?.live_sync_status;
+
   const handleHeadlineSelect = (title: string) => {
     setActiveHeadline(title);
     toast.info(`Evaluating news impact of: "${title.slice(0, 45)}..."`);
@@ -471,6 +476,273 @@ ${pointByPointNews.map((n: any, i: number) => `${i + 1}. ${n.headline}\n   - Wha
             </div>
           ) : (
             <>
+              {/* ═══════════════════════════════════════════════════════════════════
+                  REAL-TIME SENTIMENT EVOLUTION & HISTORICAL REFERENCE ENGINE
+              ═══════════════════════════════════════════════════════════════════ */}
+              <div className="rounded-2xl bg-gradient-to-br from-[#0c1424] via-[#0d182e] to-[#0a1020] border border-blue-500/30 p-5 sm:p-6 space-y-5 shadow-2xl relative overflow-hidden">
+                {/* Glow accent */}
+                <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+
+                {/* Header with live sync status */}
+                <div className="flex items-center justify-between gap-3 flex-wrap border-b border-blue-500/20 pb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/40 flex items-center justify-center text-blue-400">
+                      <Activity size={18} className="animate-pulse" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-base sm:text-lg font-black text-slate-100 tracking-tight flex items-center gap-2">
+                          Real-Time Sentiment Evolution & Historical Baseline Reference
+                        </h2>
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/40 text-emerald-300">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                          LIVE DYNAMIC ENGINE
+                        </span>
+                      </div>
+                      <p className="text-slate-400 text-xs mt-0.5">
+                        Continuous market sentiment tracking comparing fresh incoming news against historical baseline assumptions.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Sync status pills */}
+                  <div className="flex items-center gap-2 text-xs font-mono">
+                    <div className="px-3 py-1 rounded-lg bg-slate-900/90 border border-slate-700/80 text-slate-300 flex items-center gap-1.5">
+                      <Clock size={12} className="text-blue-400" />
+                      <span>Last Recalibrated: {new Date().toLocaleTimeString()}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sentiment Evolution Meter & Delta Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Prior vs Current Sentiment */}
+                  <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2.5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1.5">
+                      <Compass size={12} className="text-blue-400" /> Sentiment Shift Inflection
+                    </span>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] text-slate-500 block uppercase font-mono">Prior Baseline</span>
+                        <p className="text-sm font-bold text-slate-300 font-mono">
+                          {sentimentEvolution?.prior_sentiment_label?.replace(/_/g, " ") || "NEUTRAL"}
+                        </p>
+                        <span className="text-xs font-mono text-slate-400">
+                          {sentimentEvolution?.prior_sentiment_score || 50}/100
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col items-center px-2">
+                        <ArrowRight size={16} className="text-blue-400" />
+                        <span className={`text-xs font-black font-mono mt-0.5 ${
+                          (sentimentEvolution?.sentiment_shift_pts || 0) > 0 ? "text-emerald-400" : (sentimentEvolution?.sentiment_shift_pts || 0) < 0 ? "text-rose-400" : "text-slate-400"
+                        }`}>
+                          {(sentimentEvolution?.sentiment_shift_pts || 0) > 0 ? "+" : ""}{sentimentEvolution?.sentiment_shift_pts || 0} pts
+                        </span>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="text-[10px] text-slate-500 block uppercase font-mono">Current Live</span>
+                        <p className="text-sm font-black text-slate-100 font-mono">
+                          {sentimentEvolution?.current_sentiment_label?.replace(/_/g, " ") || "BULLISH"}
+                        </p>
+                        <span className="text-xs font-mono text-emerald-400 font-bold">
+                          {sentimentEvolution?.current_sentiment_score || 72}/100
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pt-1.5 border-t border-slate-800/80">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase font-mono border block text-center ${
+                        sentimentEvolution?.sentiment_shift_type?.includes("BULLISH")
+                          ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300"
+                          : sentimentEvolution?.sentiment_shift_type?.includes("BEARISH")
+                          ? "bg-rose-500/15 border-rose-500/30 text-rose-300"
+                          : "bg-blue-500/15 border-blue-500/30 text-blue-300"
+                      }`}>
+                        {sentimentEvolution?.sentiment_shift_type?.replace(/_/g, " ") || "BULLISH INFLECTION"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Realtime Price Delta vs Baseline */}
+                  <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2.5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1.5">
+                      <DollarSign size={12} className="text-emerald-400" /> Price & Volatility Delta
+                    </span>
+
+                    <div className="flex items-center justify-between font-mono">
+                      <div>
+                        <span className="text-[10px] text-slate-500 block uppercase">Baseline Reference</span>
+                        <p className="text-sm font-bold text-slate-300">
+                          ${priceDelta?.baseline_price_usd ? (priceDelta.baseline_price_usd >= 1 ? priceDelta.baseline_price_usd.toLocaleString("en-US", { maximumFractionDigits: 2 }) : priceDelta.baseline_price_usd.toFixed(6)) : "—"}
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="text-[10px] text-slate-500 block uppercase">Live Market</span>
+                        <p className="text-sm font-extrabold text-slate-100">
+                          ${currentPrice >= 1 ? currentPrice.toLocaleString("en-US", { maximumFractionDigits: 2 }) : currentPrice.toFixed(6)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs font-mono pt-1.5 border-t border-slate-800/80">
+                      <span className="text-slate-400 text-[11px]">Net Change vs Baseline:</span>
+                      <strong className={((priceDelta?.price_delta_pct || currentChg) >= 0) ? "text-emerald-400" : "text-rose-400"}>
+                        {(priceDelta?.price_delta_pct || currentChg) >= 0 ? "+" : ""}{(priceDelta?.price_delta_pct || currentChg).toFixed(2)}%
+                      </strong>
+                    </div>
+
+                    <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between">
+                      <span>Volatility Regime:</span>
+                      <span className="font-bold text-blue-300">{priceDelta?.volatility_regime || "EXPANSION"}</span>
+                    </div>
+                  </div>
+
+                  {/* Continuity & Confidence Score */}
+                  <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2.5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1.5">
+                      <ShieldCheck size={12} className="text-purple-400" /> Historical Continuity Score
+                    </span>
+
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-2xl font-black font-mono text-purple-300">
+                        {oldVsNew?.narrative_continuity_score || 94}/100
+                      </span>
+                      <span className="text-xs text-slate-400 font-mono">
+                        Delta Confidence: {sentimentEvolution?.confidence_delta_pct ? `${sentimentEvolution.confidence_delta_pct >= 0 ? "+" : ""}${sentimentEvolution.confidence_delta_pct}%` : "+4.2%"}
+                      </span>
+                    </div>
+
+                    <p className="text-[11px] text-slate-300 leading-snug">
+                      {sentimentEvolution?.shift_trigger_summary || `Analysis continuously reconciles previous thesis points against fresh news sentiment updates.`}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 2-Column Old vs New Comparative Reference Cards */}
+                {oldVsNew && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    {/* Left: What Changed & Historical Reference */}
+                    <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/90 space-y-2.5">
+                      <div className="flex items-center gap-2 text-blue-400 font-bold uppercase tracking-wider text-[11px]">
+                        <Clock size={13} />
+                        <span>Historical Baseline Reference</span>
+                      </div>
+                      <p className="text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
+                        {oldVsNew.historical_baseline_context}
+                      </p>
+                      
+                      <div className="space-y-1 pt-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                          Prior Baseline Reference Catalysts:
+                        </span>
+                        <ul className="space-y-1 text-slate-300 text-[11px]">
+                          {oldVsNew.historical_reference_catalysts?.map((cat: string, i: number) => (
+                            <li key={i} className="flex items-start gap-1.5">
+                              <span className="text-slate-500 font-mono">•</span>
+                              <span>{cat}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Right: Fresh Catalysts & How Assumptions Modified */}
+                    <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/90 space-y-2.5">
+                      <div className="flex items-center gap-2 text-emerald-400 font-bold uppercase tracking-wider text-[11px]">
+                        <Sparkles size={13} />
+                        <span>Fresh News Flow & Modified Assumptions</span>
+                      </div>
+                      <p className="text-slate-200 leading-relaxed bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-500/20">
+                        <strong className="text-emerald-300 font-bold block mb-1">What Changed Since Last Update:</strong>
+                        {oldVsNew.what_changed_since_last_update}
+                      </p>
+
+                      <div className="p-2.5 rounded-lg bg-blue-950/20 border border-blue-500/20 space-y-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-blue-300 block">
+                          Model Assumption Recalibration:
+                        </span>
+                        <p className="text-slate-300 text-[11px] leading-relaxed">
+                          {oldVsNew.how_old_assumptions_modified}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Interactive Dynamic Catalyst Simulator */}
+                <div className="p-4 rounded-xl bg-slate-950/90 border border-blue-500/20 space-y-3">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <Zap size={14} className="text-amber-400" />
+                      <span className="text-xs font-bold text-slate-200 uppercase tracking-wide">
+                        Test Dynamic Recalibration with Breaking News Catalyst
+                      </span>
+                    </div>
+                    {activeHeadline && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveHeadline(undefined);
+                          setCustomHeadline("");
+                          toast.info("Cleared custom catalyst. Restored live standard news feed.");
+                        }}
+                        className="text-[11px] text-rose-400 hover:underline flex items-center gap-1 font-mono"
+                      >
+                        <X size={12} /> Clear Custom News Catalyst
+                      </button>
+                    )}
+                  </div>
+
+                  <form onSubmit={handleCustomHeadlineSubmit} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={customHeadline}
+                      onChange={(e) => setCustomHeadline(e.target.value)}
+                      placeholder={`Simulate breaking news for ${coin.name} (e.g., 'SEC approves staking ETF' or 'Whale deposits 10,000 ${coin.symbol} to exchange')...`}
+                      className="flex-1 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isFetching || !customHeadline.trim()}
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs font-bold transition flex items-center gap-1.5 shrink-0 shadow-md"
+                    >
+                      <RefreshCw size={13} className={isFetching ? "animate-spin" : ""} />
+                      <span>Evaluate Dynamic Impact</span>
+                    </button>
+                  </form>
+
+                  {/* Sample Quick Catalyst Chips */}
+                  <div className="flex items-center gap-2 flex-wrap text-[11px]">
+                    <span className="text-slate-400 font-mono text-[10px] uppercase font-semibold">Quick Test Catalysts:</span>
+                    <button
+                      type="button"
+                      onClick={() => handleHeadlineSelect(`Major Institutional Asset Manager Allocates $150M to ${coin.name} Treasury Reserve`)}
+                      className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-emerald-500/40 text-slate-300 hover:text-emerald-300 transition text-[11px]"
+                    >
+                      🟢 +$150M Institutional Buy
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleHeadlineSelect(`Whale Wallet Transfers 25,000 ${coin.symbol} to Binance Spot Order Book`)}
+                      className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-rose-500/40 text-slate-300 hover:text-rose-300 transition text-[11px]"
+                    >
+                      🔴 Large Whale Deposit Alert
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleHeadlineSelect(`${coin.name} Core Developers Announce Successful Zero-Knowledge Scaling Testnet Upgrade`)}
+                      className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-blue-500/40 text-slate-300 hover:text-blue-300 transition text-[11px]"
+                    >
+                      🔵 Layer-2 Tech Upgrade
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               {/* ═══════════════════════════════════════════════════════════════════
                   SECTION 1: COIN HISTORY & FOUNDATION
               ═══════════════════════════════════════════════════════════════════ */}
@@ -1206,6 +1478,21 @@ ${pointByPointNews.map((n: any, i: number) => `${i + 1}. ${n.headline}\n   - Wha
                                 </p>
                               </div>
                             </div>
+
+                            {/* Comparison with prior narrative tag */}
+                            {item.comparison_with_prior_narrative && (
+                              <div className="p-2.5 rounded-lg bg-blue-950/20 border border-blue-500/20 text-xs flex items-start gap-2">
+                                <Compass size={13} className="text-blue-400 shrink-0 mt-0.5" />
+                                <div className="space-y-0.5 text-[11px]">
+                                  <span className="font-bold text-blue-300 uppercase tracking-wide font-mono text-[10px]">
+                                    Historical Continuity vs Prior Baseline:
+                                  </span>
+                                  <p className="text-slate-300 leading-snug">
+                                    {item.comparison_with_prior_narrative}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         );
                       })

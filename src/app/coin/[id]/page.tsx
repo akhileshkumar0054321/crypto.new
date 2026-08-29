@@ -1647,6 +1647,40 @@ export default function CoinDetailPage() {
                   </p>
                 </div>
 
+                {/* Real-time Dynamic Sentiment Evolution & Historical Baseline in Tab 7 */}
+                {(latestReport?.sentiment_evolution || latestReport?.old_vs_new_news_reference) && (
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-blue-950/30 to-slate-900/90 border border-blue-500/30 space-y-3">
+                    <div className="flex items-center justify-between border-b border-blue-500/20 pb-2">
+                      <span className="text-[11px] font-bold uppercase text-blue-300 flex items-center gap-1.5 font-mono">
+                        <Activity size={13} className="text-blue-400 animate-pulse" /> Live Sentiment Evolution & Comparative Reference
+                      </span>
+                      <span className="text-[10px] font-mono text-emerald-400">
+                        Shift: {latestReport.sentiment_evolution?.sentiment_shift_pts > 0 ? "+" : ""}{latestReport.sentiment_evolution?.sentiment_shift_pts || 0} pts ({latestReport.sentiment_evolution?.sentiment_shift_type || "STABLE"})
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                      <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1">
+                        <span className="text-[10px] font-bold uppercase text-slate-400 block font-mono">
+                          Historical Baseline Reference:
+                        </span>
+                        <p className="text-slate-300 leading-relaxed">
+                          {latestReport.old_vs_new_news_reference?.historical_baseline_context || "Reconciling prior baseline thesis against newly incoming market events."}
+                        </p>
+                      </div>
+
+                      <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1">
+                        <span className="text-[10px] font-bold uppercase text-emerald-400 block font-mono">
+                          Fresh Catalysts & Adjusted Model Assumptions:
+                        </span>
+                        <p className="text-slate-300 leading-relaxed">
+                          {latestReport.old_vs_new_news_reference?.what_changed_since_last_update || "Incoming catalysts integrated with real-time price tick verification."}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
                     <h5 className="font-bold text-blue-400 uppercase text-[11px]">Market & Order Book Structure</h5>

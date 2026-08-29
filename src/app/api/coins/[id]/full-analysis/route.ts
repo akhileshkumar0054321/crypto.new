@@ -24,7 +24,7 @@ export async function GET(
 
     const [report, newsImpact, viability, tokenomics, codeAudit, scenarios, news, simpleEnglishAnalysis] =
       await Promise.all([
-        cryptoStore.generateAIReport(coinId),
+        cryptoStore.generateAIReport(coinId, customHeadline),
         cryptoStore.analyzeCoinNewsImpact(coinId, customHeadline),
         cryptoStore.getFutureViability(coin as any),
         cryptoStore.getTokenomicsAudit(coin as any),
@@ -81,7 +81,7 @@ export async function POST(
 
     const [report, newsImpact, viability, tokenomics, codeAudit, scenarios, news, simpleEnglishAnalysis] =
       await Promise.all([
-        cryptoStore.generateAIReport(coinId),
+        cryptoStore.generateAIReport(coinId, customHeadline),
         cryptoStore.analyzeCoinNewsImpact(coinId, customHeadline),
         cryptoStore.getFutureViability(coin as any),
         cryptoStore.getTokenomicsAudit(coin as any),

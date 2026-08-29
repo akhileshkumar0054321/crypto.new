@@ -74,6 +74,9 @@ export interface SimpleEnglishCoinAnalysis {
   
   model_pipeline: string;
   generated_at: string;
+  sentiment_evolution?: SentimentEvolution;
+  old_vs_new_news_reference?: OldVsNewNewsReference;
+  realtime_price_delta?: RealtimePriceDelta;
 }
 
 export interface ModernFinBERTResult {
@@ -611,5 +614,175 @@ export interface AdvancedSignalsOverview {
     lastUpdated: string;
   };
 }
+
+// ── Real-Time Dynamic Sentiment Shift & Delta Evolution Types ───────────────
+export type SentimentShiftType =
+  | "BULLISH_INFLECTION"
+  | "BEARISH_PIVOT"
+  | "BULLISH_EXPANSION"
+  | "BEARISH_ACCELERATION"
+  | "NEUTRAL_CONSOLIDATION"
+  | "VOLATILITY_ALERT";
+
+export interface SentimentEvolution {
+  prior_sentiment_label: string;
+  prior_sentiment_score: number; // 0-100
+  current_sentiment_label: string;
+  current_sentiment_score: number; // 0-100
+  sentiment_shift_pts: number; // e.g. +28 or -15
+  sentiment_shift_type: SentimentShiftType;
+  shift_trigger_summary: string;
+  recorded_at: string;
+  prior_snapshot_time?: string;
+  confidence_delta_pct?: number;
+}
+
+export interface OldVsNewNewsReference {
+  historical_baseline_context: string;
+  fresh_incoming_catalysts: string[];
+  historical_reference_catalysts: string[];
+  what_changed_since_last_update: string;
+  how_old_assumptions_modified: string;
+  narrative_continuity_score: number; // 0-100
+  invalidated_prior_theses?: string[];
+  confirmed_prior_theses?: string[];
+}
+
+export interface RealtimePriceDelta {
+  baseline_price_usd: number;
+  current_live_price_usd: number;
+  price_delta_pct: number;
+  volatility_regime: "HIGH_EXPANSION" | "NORMAL_CHOP" | "COMPRESSION";
+  last_synced_at: string;
+}
+
+export interface AIReport {
+  id: string;
+  user_id?: string;
+  coin_id: string;
+  title: string;
+  status: "pending" | "generating" | "completed" | "failed";
+  executive_summary?: string;
+  market_analysis?: string;
+  risk_analysis?: string;
+  onchain_analysis?: string;
+  sentiment_analysis?: string;
+  viability_breakdown?: string;
+  recommendation?: "BUY" | "SELL" | "HOLD";
+  recommendation_confidence?: number;
+  risk_score_at_generation?: number;
+  model_used?: string;
+  generation_time_seconds?: number;
+  created_at: string;
+  sentiment_evolution?: SentimentEvolution;
+  old_vs_new_news_reference?: OldVsNewNewsReference;
+  realtime_price_delta?: RealtimePriceDelta;
+  is_realtime_synced?: boolean;
+  live_news_applied?: NewsItem[];
+}
+
+export interface CoinHistoryProfile {
+  founding_year: string;
+  founders: string;
+  origins_and_background: string;
+  core_purpose_plain_english: string;
+  underlying_technology: string;
+  ecosystem_and_adoption: string;
+  consensus_type: string;
+}
+
+export interface PastPerformanceProfile {
+  ath_price_usd: number;
+  ath_date: string;
+  ath_drawdown_pct: number;
+  atl_price_usd: number;
+  atl_date: string;
+  atl_gain_multiple: string;
+  cycle_analysis: string;
+  recovery_track_record: string;
+  volatility_profile: string;
+  benchmarks: {
+    roi_7d: string;
+    roi_30d: string;
+    roi_90d: string;
+    roi_1y: string;
+    roi_all_time: string;
+  };
+}
+
+export interface NewsPointByPointItem {
+  id: string;
+  headline: string;
+  source: string;
+  time_ago: string;
+  sentiment: "BULLISH" | "BEARISH" | "NEUTRAL" | "WARNING";
+  what_happened_simple: string;
+  why_it_matters_for_your_money: string;
+  future_price_impact: {
+    short_term_outlook: string;
+    medium_term_outlook: string;
+    sentiment_tag: "BULLISH" | "BEARISH" | "NEUTRAL";
+  };
+}
+
+export interface InvestmentStrategyGuide {
+  short_term_trading: {
+    suitable_for: string;
+    entry_tactics: string;
+    recommended_stop_loss: string;
+    risk_reward_ratio: string;
+    position_sizing_rule: string;
+    take_profit_strategy: string;
+    warning: string;
+  };
+  long_term_investing: {
+    suitable_for: string;
+    dca_strategy: string;
+    fundamental_holding_thesis: string;
+    exit_triggers: string;
+    staking_and_yield: string;
+    safe_storage_recommendation?: string;
+    time_horizon?: string;
+  };
+}
+
+export interface RiskMatrixAndDownsideScenarios {
+  popularity_audit: {
+    popularity_level: string;
+    is_popular: boolean;
+    popularity_summary: string;
+    community_health: string;
+    liquidity_depth: string;
+  };
+  downside_failure_conditions: Array<{
+    title: string;
+    severity: "CRITICAL" | "HIGH" | "MODERATE" | "LOW";
+    trigger_condition: string;
+    drawdown_impact: string;
+    how_it_affects_your_money: string;
+  }>;
+  detailed_pros: Array<{ title: string; explanation: string }>;
+  detailed_cons: Array<{ title: string; explanation: string }>;
+  bottom_line_risk_verdict: string;
+  overall_safety_rating: "SAFE_FOR_LONG_TERM" | "MODERATE_RISK" | "HIGH_SPECULATION" | "EXTREME_DANGER_AVOID";
+}
+
+export interface DetailedSixSectionAuditReport {
+  history: CoinHistoryProfile;
+  pastPerformance: PastPerformanceProfile;
+  pointByPointNews: NewsPointByPointItem[];
+  investmentStrategy: InvestmentStrategyGuide;
+  riskMatrix: RiskMatrixAndDownsideScenarios;
+  sentiment_evolution?: SentimentEvolution;
+  old_vs_new_news_reference?: OldVsNewNewsReference;
+  realtime_price_delta?: RealtimePriceDelta;
+  live_sync_status?: {
+    is_live: boolean;
+    last_updated: string;
+    live_news_count: number;
+    sentiment_drift: string;
+  };
+}
+
 
 
