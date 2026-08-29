@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { cryptoStore } from "@/lib/server/cryptoService";
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  _req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await Promise.resolve(params);
+  const id = params?.id;
   const holding = cryptoStore.holdings.get(id);
   if (!holding) {
     return NextResponse.json({ error: "Holding not found" }, { status: 404 });
@@ -14,10 +14,10 @@ export async function GET(
 }
 
 export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  _req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await Promise.resolve(params);
+  const id = params?.id;
   if (cryptoStore.holdings.has(id)) {
     cryptoStore.holdings.delete(id);
     return NextResponse.json({ status: "deleted", id });

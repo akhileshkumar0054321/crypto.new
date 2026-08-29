@@ -140,7 +140,7 @@ export const alertApi = {
   create:  (data: Record<string, unknown>)    => api.post("/api/alerts", data),
   update:  (id: string, data: Record<string, unknown>) => api.put(`/api/alerts/${id}`, data),
   delete:  (id: string)                       => api.delete(`/api/alerts/${id}`),
-  toggle:  (id: string)                       => api.patch(`/api/alerts/${id}/toggle`),
+  toggle:  (id: string)                       => api.patch(`/api/alerts/${id}`),
 };
 
 export const reportApi = {

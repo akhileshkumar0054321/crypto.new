@@ -264,6 +264,9 @@ export interface DexTrendingCoin {
   marketCap: number;
   fdv: number;
   icon?: string;
+  imageUrl?: string;
+  image_url?: string;
+  logo?: string;
   header?: string;
   description?: string;
   dexScreenerUrl: string;

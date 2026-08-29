@@ -12,6 +12,7 @@ import {
   ArrowRight,
   ShieldAlert,
 } from "lucide-react";
+import { NewsImage } from "./NewsImage";
 
 interface InteractiveNewsCardProps {
   item: NewsItem;
@@ -36,23 +37,14 @@ export function InteractiveNewsCard({ item, onSelect }: InteractiveNewsCardProps
     >
       {/* Image Thumbnail Container */}
       <div className="relative h-44 w-full overflow-hidden bg-slate-900">
-        {item.image_url ? (
-          <img
-            src={item.image_url}
-            alt={item.title}
-            referrerPolicy="no-referrer"
-            onError={(e) => {
-              (e.currentTarget as HTMLElement).style.display = "none";
-            }}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-tr from-slate-900 to-blue-950 flex items-center justify-center">
-            <Sparkles size={32} className="text-blue-400/30" />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0e131d] via-[#0e131d]/40 to-transparent" />
+        <NewsImage
+          src={item.image_url}
+          alt={item.title}
+          category={item.category}
+          sentiment={item.sentiment}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0e131d] via-[#0e131d]/40 to-transparent pointer-events-none" />
 
         {/* Top Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 flex-wrap">

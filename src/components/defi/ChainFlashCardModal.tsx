@@ -26,6 +26,7 @@ import {
   Share2,
 } from "lucide-react";
 import Link from "next/link";
+import { CryptoAvatar } from "@/components/ui/CryptoAvatar";
 
 export interface ChainMetadata {
   name: string;
@@ -477,22 +478,12 @@ export function ChainFlashCardModal({
         {/* ── Top Header ──────────────────────────────────────────────────────── */}
         <div className="p-4 sm:p-6 border-b border-slate-800/80 bg-gradient-to-r from-[#0d1424] via-[#090d18] to-[#0d1424] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 p-0.5 overflow-hidden flex items-center justify-center shrink-0 shadow-lg shadow-blue-900/20">
-              {targetItem.logo ? (
-                <img
-                  src={targetItem.logo}
-                  alt={targetItem.name}
-                  className="w-full h-full object-cover rounded-xl"
-                  onError={(e) => {
-                    (e.target as any).style.display = "none";
-                  }}
-                />
-              ) : (
-                <span className="text-xs font-mono font-black text-emerald-400">
-                  {targetItem.symbol?.slice(0, 3) || targetItem.name.slice(0, 3)}
-                </span>
-              )}
-            </div>
+            <CryptoAvatar
+              name={targetItem.name}
+              symbol={targetItem.symbol}
+              imageUrl={targetItem.logo}
+              size="lg"
+            />
 
             <div>
               <div className="flex items-center gap-2 flex-wrap">

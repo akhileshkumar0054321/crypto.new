@@ -108,6 +108,7 @@ export default function PortfolioAnalysisPage() {
       coin_id: newCoinId,
       name: matched?.name || newCoinId.toUpperCase(),
       symbol: matched?.symbol?.toUpperCase() || newCoinId.slice(0, 4).toUpperCase(),
+      image_url: matched?.image_url,
       price_usd: live.price,
       price_change_24h: live.change24h,
       risk_score: matched?.risk_score || 35,
@@ -488,6 +489,7 @@ export default function PortfolioAnalysisPage() {
               coinId={selectedCoinData.coin_id}
               symbol={selectedCoinData.symbol}
               name={selectedCoinData.name}
+              imageUrl={selectedCoinData.image_url}
               size="lg"
             />
             <div>
@@ -713,6 +715,7 @@ export default function PortfolioAnalysisPage() {
                             coinId={item.coin_id}
                             symbol={item.symbol}
                             name={item.name}
+                            imageUrl={item.matchedCoin?.image_url}
                             size="md"
                           />
                           <div>
@@ -891,6 +894,7 @@ export default function PortfolioAnalysisPage() {
                       coinId={item.coin_id}
                       symbol={item.symbol}
                       name={item.name}
+                      imageUrl={item.matchedCoin?.image_url}
                       size="md"
                     />
                     <div>

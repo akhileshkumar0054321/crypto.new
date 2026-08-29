@@ -4,10 +4,10 @@ import { cryptoStore } from "@/lib/server/cryptoService";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  _req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await Promise.resolve(params);
+  const id = params?.id;
   const existing = cryptoStore.alerts.get(id);
   if (!existing) {
     return NextResponse.json({ error: "Alert not found" }, { status: 404 });
@@ -17,10 +17,10 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const id = params?.id;
     const existing = cryptoStore.alerts.get(id);
     if (!existing) {
       return NextResponse.json({ error: "Alert not found" }, { status: 404 });
@@ -41,11 +41,26 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+export async function PATCH(
+  _req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await Promise.resolve(params);
+  const id = params?.id;
+  const alert = cryptoStore.alerts.get(id);
+  if (!alert) {
+    return NextResponse.json({ error: "Alert not found" }, { status: 404 });
+  }
+
+  alert.is_active = !alert.is_active;
+  cryptoStore.alerts.set(id, alert);
+  return NextResponse.json(alert);
+}
+
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params?.id;
   if (cryptoStore.alerts.has(id)) {
     cryptoStore.alerts.delete(id);
     return NextResponse.json({ status: "deleted", id });

@@ -6,6 +6,7 @@ import { useLiveMarket } from "@/lib/context/LiveMarketContext";
 import { useState, useMemo } from "react";
 import { InteractiveNewsCard } from "@/components/news/InteractiveNewsCard";
 import { NewsImpactModal } from "@/components/news/NewsImpactModal";
+import { NewsImage } from "@/components/news/NewsImage";
 import { NewsItem } from "@/types";
 import {
   Bell,
@@ -242,24 +243,16 @@ export default function AlertsPage() {
               className="p-4 rounded-xl bg-gradient-to-r from-red-950/50 via-red-900/30 to-slate-900/50 border border-red-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-lg shadow-red-950/20 cursor-pointer hover:border-red-500/50 transition group"
             >
               <div className="flex items-start gap-4">
-                {criticalItems[0].image_url ? (
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border border-red-500/30 bg-slate-950">
-                    <img
-                      src={criticalItems[0].image_url}
-                      alt={criticalItems[0].title}
-                      referrerPolicy="no-referrer"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLElement).style.display = "none";
-                      }}
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                    />
-                    <div className="absolute inset-0 bg-red-950/30" />
-                  </div>
-                ) : (
-                  <div className="p-3 rounded-lg bg-red-500/20 text-red-400 shrink-0 mt-0.5">
-                    <ShieldAlert size={24} />
-                  </div>
-                )}
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border border-red-500/30 bg-slate-950">
+                  <NewsImage
+                    src={criticalItems[0].image_url}
+                    alt={criticalItems[0].title}
+                    category={criticalItems[0].category}
+                    sentiment={criticalItems[0].sentiment}
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <div className="absolute inset-0 bg-red-950/20 pointer-events-none" />
+                </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-red-500/20 text-red-400 border border-red-500/30">
@@ -442,23 +435,15 @@ export default function AlertsPage() {
                   >
                     <div className="flex items-start gap-3.5 flex-1 min-w-0">
                       {/* Image Thumbnail */}
-                      {item.image_url ? (
-                        <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 bg-slate-950 border border-white/5">
-                          <img
-                            src={item.image_url}
-                            alt={item.title}
-                            referrerPolicy="no-referrer"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLElement).style.display = "none";
-                            }}
-                            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg shrink-0 bg-slate-800 flex items-center justify-center text-slate-500 border border-white/5">
-                          <Globe size={24} />
-                        </div>
-                      )}
+                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 bg-slate-950 border border-white/5">
+                        <NewsImage
+                          src={item.image_url}
+                          alt={item.title}
+                          category={item.category}
+                          sentiment={item.sentiment}
+                          className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                        />
+                      </div>
 
                       <div className="space-y-1.5 flex-1 min-w-0">
                         {/* Meta badges */}

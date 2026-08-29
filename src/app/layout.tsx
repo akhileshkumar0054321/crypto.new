@@ -6,8 +6,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "CryptoVision | Real-Time Cryptocurrency Intelligence & Risk Radar",
-  description: "Real-time cryptocurrency intelligence, live radar surveillance, DexScreener small-cap token profiling, CryptoBERT NLP sentiment analysis, simple-English coin breakdowns, and deep analysis reports.",
+  title: "Remix crypto | Real-Time Cryptocurrency Intelligence & Risk Radar",
+  description: "Real-time cryptocurrency market intelligence, live price tracking, early trend discovery, whale activity tracking, market divergence detection, downside risk checks, and trade exit planning.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

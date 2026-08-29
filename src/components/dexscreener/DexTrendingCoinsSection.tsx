@@ -356,7 +356,7 @@ export function DexTrendingCoinsSection({
                         coinId={coin.id}
                         symbol={coin.symbol}
                         name={coin.name}
-                        imageUrl={coin.icon}
+                        imageUrl={coin.icon || coin.imageUrl || coin.image_url || coin.logo}
                         size="md"
                         className="w-10 h-10 flex-shrink-0"
                       />

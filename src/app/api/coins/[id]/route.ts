@@ -4,10 +4,10 @@ import { cryptoStore } from "@/lib/server/cryptoService";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  _req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await Promise.resolve(params);
+  const id = params?.id;
   const coin = await cryptoStore.getCoin(id);
   if (!coin) {
     return NextResponse.json({ error: `Coin '${id}' not found` }, { status: 404 });

@@ -17,6 +17,7 @@ import {
   Compass,
 } from "lucide-react";
 import Link from "next/link";
+import { NewsImage } from "./NewsImage";
 
 interface NewsImpactModalProps {
   item: NewsItem | null;
@@ -48,22 +49,14 @@ export function NewsImpactModal({ item, onClose }: NewsImpactModalProps) {
       >
         {/* Header Image Cover */}
         <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-slate-900 rounded-t-2xl">
-          {item.image_url ? (
-            <img
-              src={item.image_url}
-              alt={item.title}
-              referrerPolicy="no-referrer"
-              onError={(e) => {
-                (e.currentTarget as HTMLElement).style.display = "none";
-              }}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-tr from-blue-900 via-slate-900 to-indigo-950 flex items-center justify-center">
-              <Sparkles size={48} className="text-blue-400/40" />
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e131d] via-[#0e131d]/60 to-transparent" />
+          <NewsImage
+            src={item.image_url}
+            alt={item.title}
+            category={item.category}
+            sentiment={item.sentiment}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e131d] via-[#0e131d]/60 to-transparent pointer-events-none" />
 
           {/* Close button */}
           <button

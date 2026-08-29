@@ -43,6 +43,7 @@ import {
   DefiStablecoin,
 } from "@/types";
 import { ChainFlashCardModal } from "@/components/defi/ChainFlashCardModal";
+import { CryptoAvatar } from "@/components/ui/CryptoAvatar";
 
 export default function DefiDashboardPage() {
   const [activeTab, setActiveTab] = useState<
@@ -530,22 +531,12 @@ export default function DefiDashboardPage() {
                             {/* Name & Logo */}
                             <td className="py-3.5 px-4">
                               <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                  {p.logo ? (
-                                    <img
-                                      src={p.logo}
-                                      alt={p.name}
-                                      className="w-full h-full object-cover"
-                                      onError={(e) => {
-                                        (e.target as any).style.display = "none";
-                                      }}
-                                    />
-                                  ) : (
-                                    <span className="font-bold text-slate-300 font-mono text-[10px]">
-                                      {p.symbol?.slice(0, 3) || "DEF"}
-                                    </span>
-                                  )}
-                                </div>
+                                <CryptoAvatar
+                                  name={p.name}
+                                  symbol={p.symbol}
+                                  imageUrl={p.logo}
+                                  size="md"
+                                />
                                 <div>
                                   <div className="font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
                                     <span>{p.name}</span>
