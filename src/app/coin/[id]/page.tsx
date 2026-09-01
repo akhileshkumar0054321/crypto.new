@@ -1005,7 +1005,7 @@ export default function CoinDetailPage() {
               {/* Bull Case */}
               <div className="card border-emerald-500/30 bg-emerald-950/10 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Bull Scenario (Cycle Peak)</span>
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Bull Scenario (Expected Price Peak)</span>
                   <span className="text-xs font-mono text-emerald-400 font-bold">{scenarios?.bull_case_roi || "+140%"}</span>
                 </div>
                 <p className="text-2xl font-extrabold font-mono text-slate-100">
@@ -1019,7 +1019,7 @@ export default function CoinDetailPage() {
               {/* Base Case */}
               <div className="card border-blue-500/30 bg-blue-950/10 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">Base Case (6-12M Fair Value)</span>
+                  <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">Base Case (Expected Price Fair Value)</span>
                   <span className="text-xs font-mono text-blue-400 font-bold">{scenarios?.base_case_roi || "+35%"}</span>
                 </div>
                 <p className="text-2xl font-extrabold font-mono text-slate-100">
@@ -1033,7 +1033,7 @@ export default function CoinDetailPage() {
               {/* Bear Crash Floor */}
               <div className="card border-rose-500/30 bg-rose-950/10 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">Bear Crash Floor (Stress Test)</span>
+                  <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">Bear Floor (Expected Price Floor)</span>
                   <span className="text-xs font-mono text-rose-400 font-bold">{scenarios?.bear_crash_drawdown || "-45%"}</span>
                 </div>
                 <p className="text-2xl font-extrabold font-mono text-slate-100">
@@ -1045,7 +1045,7 @@ export default function CoinDetailPage() {
               </div>
             </div>
 
-            {/* Interactive Custom Price Target Calculator */}
+            {/* Interactive Custom Expected Price Calculator */}
             {(() => {
               const targetP = parseFloat(customTargetPriceInput) || (scenarios?.bull_case_usd || displayPrice * 1.5);
               const investAmount = parseFloat(customInvestInput) || 1000;
@@ -1060,15 +1060,15 @@ export default function CoinDetailPage() {
                     <div>
                       <h4 className="text-sm font-extrabold text-slate-100 flex items-center gap-2">
                         <Activity size={15} className="text-blue-400" />
-                        Interactive Price Target & Investment Simulator
+                        Interactive Expected Price & Investment Simulator
                       </h4>
                       <p className="text-slate-400 text-xs mt-0.5">
-                        Model your expected returns and profit multiples based on custom target price projections.
+                        Model your expected returns and profit multiples based on custom expected price projections.
                       </p>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] uppercase font-bold text-slate-500">Quick Targets:</span>
+                      <span className="text-[10px] uppercase font-bold text-slate-500">Quick Expected Multipliers:</span>
                       <button
                         type="button"
                         onClick={() => setCustomTargetPriceInput((displayPrice * 1.25).toFixed(2))}
@@ -1095,7 +1095,7 @@ export default function CoinDetailPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                     <div>
-                      <label className="text-slate-400 font-bold text-[10px] uppercase block mb-1">Target Price (USD)</label>
+                      <label className="text-slate-400 font-bold text-[10px] uppercase block mb-1">Expected Price (USD)</label>
                       <div className="relative">
                         <span className="absolute left-3 top-2.5 text-slate-500 font-mono font-bold">$</span>
                         <input

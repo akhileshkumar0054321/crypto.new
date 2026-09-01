@@ -247,7 +247,7 @@ export function DevilsAdvocateView({ initialData = [], coinId }: Props) {
                 </div>
 
                 <div className="text-right pl-4 border-l border-slate-800">
-                  <span className="text-[10px] text-slate-400 font-mono block">Worst-Case Drawdown</span>
+                  <span className="text-[10px] text-slate-400 font-mono block">Expected Price Drawdown</span>
                   <span className="text-sm font-bold font-mono text-rose-400 block mt-0.5">
                     {analysis.worst_case_drawdown_target}
                   </span>

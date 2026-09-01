@@ -195,10 +195,10 @@ export function ThesisInvalidationView({ initialTheses = [], coinId }: Props) {
               <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
                 <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider font-mono flex items-center gap-1.5">
                   <TrendingUp size={13} />
-                  <span>Target Growth & Price Expectation</span>
+                  <span>Expected Price Growth & Outlook</span>
                 </span>
                 <p className="text-xs text-slate-200 leading-relaxed">
-                  {thesisData.target_summary || `Projected target of ${thesisData.target_price_horizon.target} based on ecosystem adoption and market inflows.`}
+                  {thesisData.target_summary || `Expected price of ${thesisData.target_price_horizon.target} based on ecosystem adoption and market inflows.`}
                 </p>
               </div>
             </div>
@@ -226,28 +226,28 @@ export function ThesisInvalidationView({ initialTheses = [], coinId }: Props) {
               </div>
             </div>
 
-            {/* Target Price Horizons */}
+            {/* Expected Price Horizons */}
             <div className="space-y-2">
               <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider font-mono block">
-                Target Price Horizons
+                Expected Price Horizons
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
-                  <span className="text-[10px] text-slate-400 font-mono block">Conservative Target</span>
+                  <span className="text-[10px] text-slate-400 font-mono block">Conservative Expected Price</span>
                   <span className="text-sm font-bold font-mono text-slate-200 block mt-1">
                     {thesisData.target_price_horizon.conservative}
                   </span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-center">
-                  <span className="text-[10px] text-emerald-400 font-mono block">Base Case Objective</span>
+                  <span className="text-[10px] text-emerald-400 font-mono block">Base Case Expected Price</span>
                   <span className="text-base font-extrabold font-mono text-emerald-300 block mt-1">
                     {thesisData.target_price_horizon.target}
                   </span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-center">
-                  <span className="text-[10px] text-cyan-400 font-mono block">Bull Cycle Moonshot</span>
+                  <span className="text-[10px] text-cyan-400 font-mono block">Bull Cycle Expected Price</span>
                   <span className="text-base font-extrabold font-mono text-cyan-300 block mt-1">
                     {thesisData.target_price_horizon.moonshot}
                   </span>

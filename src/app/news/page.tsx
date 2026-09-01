@@ -60,9 +60,9 @@ function NewsContent() {
         </div>
       </div>
 
-      {/* Search & Refresh Bar */}
+      {/* Search Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-        <div className="relative w-full sm:w-96">
+        <div className="relative w-full">
           <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             type="text"
@@ -72,14 +72,6 @@ function NewsContent() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-
-        <button
-          onClick={() => refetch()}
-          className="px-4 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 text-xs font-bold border border-blue-500/30 transition flex items-center gap-2 cursor-pointer self-stretch sm:self-auto justify-center"
-        >
-          <RefreshCw size={14} className={isFetching ? "animate-spin text-blue-400" : ""} />
-          <span>Refresh Wire</span>
-        </button>
       </div>
 
       {/* News Grid */}

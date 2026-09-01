@@ -68,7 +68,6 @@ export default function AlertsPage() {
   const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [selectedSentiment, setSelectedSentiment] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
 
   // Custom alert state
@@ -124,15 +123,6 @@ export default function AlertsPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["alerts"] }),
   });
 
-  const handleManualRefresh = async () => {
-    setIsRefreshing(true);
-    await refetchNews();
-    setTimeout(() => {
-      setIsRefreshing(false);
-      toast.success("Real-time intelligence stream synchronized.");
-    }, 400);
-  };
-
   const copyLink = (url: string, title: string) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url);
@@ -174,16 +164,6 @@ export default function AlertsPage() {
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
-          <button
-            id="refresh-news-btn"
-            onClick={handleManualRefresh}
-            disabled={isRefreshing || isNewsRefetching}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition disabled:opacity-50"
-          >
-            <RefreshCw size={14} className={isRefreshing || isNewsRefetching ? "animate-spin text-blue-400" : ""} />
-            {isRefreshing || isNewsRefetching ? "Syncing Feed..." : "Refresh Intelligence Stream"}
-          </button>
-
           <button
             id="create-alert-btn"
             onClick={() => {

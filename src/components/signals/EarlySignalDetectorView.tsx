@@ -87,17 +87,6 @@ export function EarlySignalDetectorView({ signals = [], isLoading, onRefresh }: 
           </div>
 
           <div className="flex items-center gap-3">
-            {onRefresh && (
-              <button
-                type="button"
-                onClick={onRefresh}
-                disabled={isLoading}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition border border-slate-700 cursor-pointer disabled:opacity-50"
-              >
-                <RefreshCw size={13} className={isLoading ? "animate-spin text-blue-400" : ""} />
-                <span>Update Market Data</span>
-              </button>
-            )}
             <div className="px-3.5 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-right">
               <span className="text-[10px] text-blue-400 font-mono block">MONITORED COINS</span>
               <span className="text-sm font-bold text-white font-mono">{signals.length} Trends Tracked</span>
@@ -291,7 +280,7 @@ export function EarlySignalDetectorView({ signals = [], isLoading, onRefresh }: 
                       </span>
                     </div>
                     <div className="p-1.5 rounded bg-slate-950/60 border border-slate-800">
-                      <span className="text-slate-500 text-[10px] block font-sans">Target Resistance:</span>
+                      <span className="text-slate-500 text-[10px] block font-sans">Expected Price Resistance:</span>
                       <span className="text-slate-200 font-bold">
                         {item.breakdown_prediction?.overhead_resistance || item.entry_zone.split("-")[1] || "Resistance"}
                       </span>

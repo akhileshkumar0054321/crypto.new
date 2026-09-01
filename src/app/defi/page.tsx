@@ -269,21 +269,9 @@ export default function DefiDashboardPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => refetchOverview()}
-                disabled={isOverviewRefetching}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-semibold text-slate-300 transition cursor-pointer"
-                title="Refresh on-chain DeFi data"
-              >
-                <RefreshCw
-                  size={13}
-                  className={isOverviewRefetching ? "animate-spin text-emerald-400" : "text-slate-400"}
-                />
-                <span>Sync On-Chain Data</span>
-              </button>
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>31+ Public Endpoints Connected</span>
+                <span>31+ Public Endpoints Connected (Live Synced)</span>
               </div>
             </div>
           </div>

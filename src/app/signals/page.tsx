@@ -107,18 +107,6 @@ function SignalsContent() {
             Early trend detection, smart money tracking, price vs real activity checks, and downside risk checks based on live market activity.
           </p>
         </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => refetch()}
-            disabled={isLoading}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-xs font-semibold transition cursor-pointer disabled:opacity-50"
-          >
-            <RefreshCw size={13} className={isLoading ? "animate-spin text-blue-400" : ""} />
-            <span>Refresh Signals</span>
-          </button>
-        </div>
       </div>
 
       {/* 5-Tab Navigation Bar */}
